@@ -1,32 +1,23 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import "./App.css";
 
-// use reducer better for larger, more complex tasks - nested components - passing props etc
+/* why use useReducer? 
+- separate logic outside of component
+- ensures you can only change state in specified ways 
+- makes code more readable/maintable/testable 
+*/
+
+// use reducer better for larger, more complex tasks - nested components - massive obj - passing props etc
+// you can quickly see all states in the reducer fn
 
 // good practice to switch hard coded strings for inc/dec to obj like below
-const ACTIONS = {
-  INCREMENT: "increment",
-  DECREMENT: "decrement",
-};
+const ACTIONS = {};
 
 // useReducer fn defined here - takes 2 params
 // curr state & action - which is passed into dispatch fn
 // whenever we call dispatch with, will be set as the action param
 // reducer will return new updated state
-function reducer(state, action) {
-  // check our different types - actions we can perform on our state
-  switch (action.type) {
-    // every time we call dispatch - our count will inc by 1
-    case ACTIONS.INCREMENT: //"increment":
-      return { count: state.count + 1 };
-    case ACTIONS.DECREMENT: //"decrement":
-      return { count: state.count - 1 };
-    // good to have default - could throw err or return curr state
-    default:
-      // if not valid - we're not inc or dec - do nothing
-      return state;
-  }
-}
+function reducer(state, action) {}
 // React docs -
 function App() {
   //useReducer returns an array
@@ -36,21 +27,22 @@ function App() {
   // [state, dispatch]
   // - state - { count: 0 } - if 0 = count,
   // - dispatch fn - updates state - calls reducer fn
-  const [state, dispatch] = useReducer(reducer, { count: 0 });
+  const [todos, dispatch] = useReducer(reducer, []);
+  // bring in name state and set to empty string
+  const [name, setName] = useState("");
 
-  function increment() {
-    // calling dispatch() - will allow us to just inc
-    dispatch({ type: ACTIONS.INCREMENT /* "increment" */ });
-    // to dec we need to pass a type into dispatch, then use if or switch statement into reducer fn.
-  }
-  function decrement() {
-    dispatch({ type: ACTIONS.DECREMENT /*"decrement" */ });
-  }
   return (
+    // set up code for form input
+    // value = name onChange = variable to be name  - setName
+    // this will give us an input which will update our name state/variable - line 32
     <>
-      <button onClick={decrement}>-</button>
-      <span>{state.count}</span>
-      <button onClick={increment}>+</button>
+      <form>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </form>
     </>
   );
 }
